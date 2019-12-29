@@ -1,18 +1,39 @@
-import sys
+# import sys
 import socket
+from threading import Thread
+import configparser
 
-s = socket.socket()
+config = configparser.ConfigParser()
+config.read('config.ini')
+generalConfig = config['General']
+
+ss = socket.socket()
 host = socket.gethostname()
-port = 8899
+port = int(generalConfig['port'])
+
 print("Me (server): ", host, ":", port)
-#s.bind((host, port))
-s.bind(('', port))
+ss.bind(('', port))
 
-s.listen(5)
 
-while True:
-	c, addr = s.accept()
-	print("got connection from ", addr)
-	msg = str("gg").encode()
-	c.send(msg)
-	c.close()
+class Client(Thread):
+    def __init__(self, socket, address):
+        Thread.__init__(self)
+        self.sock = socket
+        self.addr = address
+        self.start()
+
+    def run(self):
+        while 1:
+            print('Client(', self.addr, self.sock, ') sent:', self.sock.recv(1024).decode())
+            self.sock.send(b'Oi you sent something to me')
+
+
+ss.listen(5)
+print('server started and listening...')
+while 1:
+    cs, address = ss.accept()
+    print("got connection from ", address)
+    Client(cs, address)
+
+ss.close()
+cs.close()
