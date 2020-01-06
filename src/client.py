@@ -27,7 +27,9 @@ def ts(msg):
 
 
 while 1:
-    r = input('enter: ')
+    r = input('Message to send: ')
+    if r == 'qq':
+        break
     ts(r)
 
 s.close()

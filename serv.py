@@ -2,6 +2,13 @@
 import socket
 from threading import Thread
 import configparser
+import logging
+
+
+logging.basicConfig(level=logging.DEBUG,
+                    filename='server.log',
+                    filemode='a',
+                    format='[%(asctime)-15s] %(name)s - %(levelname)s - %(message)s')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -13,6 +20,7 @@ port = int(generalConfig['port'])
 
 print("Me (server): ", host, ":", port)
 ss.bind(('', port))
+logging.info('=== NEW SESSION ===')
 
 
 class Client(Thread):
@@ -24,8 +32,10 @@ class Client(Thread):
 
     def run(self):
         while 1:
-            print('Client(', self.addr, self.sock, ') sent:', self.sock.recv(1024).decode())
-            self.sock.send(b'Oi you sent something to me')
+            msg = self.sock.recv(1024).decode()
+            print('Client(', self.addr, ') sent:', msg)
+            logging.info('Client(%s %s ) sent: %s', self.addr, self.sock, msg)
+            self.sock.send(b'kk')
 
 
 ss.listen(5)
@@ -33,6 +43,7 @@ print('server started and listening...')
 while 1:
     cs, address = ss.accept()
     print("got connection from ", address)
+    logging.info('Got connection from %s %s', cs, address)
     Client(cs, address)
 
 ss.close()
