@@ -2,7 +2,7 @@ import socket
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 generalConfig = config['General']
 port = int(generalConfig['port'])
 host = generalConfig['host']

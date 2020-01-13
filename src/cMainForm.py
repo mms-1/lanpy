@@ -12,14 +12,14 @@ class MainForm(npyscreen.FormBaseNew):
         self.add_event_hander("event_inputbox_send", self.message_send)
 
         y, x = self.useable_space()
-        self.userListBox = self.add(UserListBox, name="Users", value=0, relx=0,
+        self.userListBox = self.add(UserListBox, name="Users", value=0, relx=1,
                                     max_width=x // 5, rely=1, max_height=-5)
         self.userListBox.create()
         self.chatBox = self.add(ChatBox, rely=1, relx=(x // 5) + 1, max_height=-5, editable=True,
                                       custom_highlighting=True, highlighting_arr_color_data=[0])
         self.chatBox.create()
         self.inputBox = self.add(InputBox, name="Input",
-                                 relx=(x // 5) + 1, rely=-7, height=7)
+                                 relx=(x // 5) + 1, rely=-7, height=6)
 
         new_handlers = {
             # exit
@@ -42,13 +42,17 @@ class MainForm(npyscreen.FormBaseNew):
     def event_update_main_form(self, event):
         self.display()
         self.userListBox.display()
+        self.chatBox.display()
+        self.inputBox.display()
 
     def message_send(self, event):
         message = self.inputBox.value.strip()
         if message != "":
             self.chatBox.update_messages()
             self.inputBox.value = ""
+            self.inputBox.footer = message
             self.inputBox.display()
+
 
     def exit_func(self, _input):
         exit(0)
