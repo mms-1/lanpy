@@ -1,8 +1,8 @@
+import curses
 from src import npyscreen
 from src.cUserListBox import UserListBox
 from src.cInputBox import InputBox
 from src.cChatBox import ChatBox
-import curses
 
 
 class MainForm(npyscreen.FormBaseNew):
@@ -29,7 +29,7 @@ class MainForm(npyscreen.FormBaseNew):
             # send message
             "^S": self.message_send,
             curses.ascii.alt(curses.ascii.NL): self.message_send,
-            curses.ascii.alt(curses.KEY_ENTER): self.message_send
+            curses.ascii.alt(curses.KEY_ENTER): self.message_send,
         }
         self.add_handlers(new_handlers)
 
@@ -52,7 +52,6 @@ class MainForm(npyscreen.FormBaseNew):
             self.inputBox.value = ""
             self.inputBox.footer = message
             self.inputBox.display()
-
 
     def exit_func(self, _input):
         exit(0)

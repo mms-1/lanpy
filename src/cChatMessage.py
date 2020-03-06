@@ -1,6 +1,5 @@
 
 
-
 class ChatMessage:
     def __init__(self, name, date, color, message, id, read):
         self.name = name
